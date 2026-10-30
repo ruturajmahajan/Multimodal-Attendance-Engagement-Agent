@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MAEA — Multimodal Attendance & Engagement Agent</title>
+  <meta name="description" content="AI-powered, privacy-preserving classroom intelligence system for automated attendance tracking, engagement analysis, and teaching suggestions." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="bg-particles" id="bgParticles"></div>
+  <div class="bg-grid"></div>
+
+  <!-- App Shell -->
+  <div class="app-shell">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <circle cx="14" cy="14" r="12" stroke="url(#lg1)" stroke-width="2"/>
+            <circle cx="14" cy="14" r="5" fill="url(#lg2)"/>
+            <path d="M14 2 L14 8 M14 20 L14 26 M2 14 L8 14 M20 14 L26 14" stroke="url(#lg1)" stroke-width="1.5" stroke-linecap="round"/>
+            <defs>
+              <linearGradient id="lg1" x1="0" y1="0" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#7C3AED"/>
+                <stop offset="1" stop-color="#06B6D4"/>
+              </linearGradient>
+              <linearGradient id="lg2" x1="0" y1="0" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#7C3AED"/>
+                <stop offset="1" stop-color="#06B6D4"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <span class="logo-name">MAEA</span>
+          <span class="logo-sub">Classroom Intelligence</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">MAIN</div>
+        <a href="#" class="nav-item active" data-page="dashboard" onclick="navigateTo('dashboard', this)">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"/><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"/></svg>
+          <span>Overview</span>
+        </a>
+        <a href="#" class="nav-item" data-page="attendance" onclick="navigateTo('attendance', this)">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg>
+          <span>Attendance</span>
+          <span class="nav-badge">Live</span>
+        </a>
+        <a href="#" class="nav-item" data-page="engagement" onclick="navigateTo('engagement', this)">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
+          <span>Engagement</span>
+        </a>
+        <a href="#" class="nav-item" data-page="suggestions" onclick="navigateTo('suggestions', this)">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.396 0 2.7.37 3.8 1.016A7.968 7.968 0 0114.5 14c1.255 0 2.443.29 3.5.804V4.804A7.969 7.969 0 0014.5 4c-1.396 0-2.7.37-3.8 1.016A7.969 7.969 0 009 4.804z"/></svg>
+          <span>AI Suggestions</span>
+        </a>
+        <a href="#" class="nav-item" data-page="students" onclick="navigateTo('students', this)">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v1h8v-1zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-1a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v1h-3zM4.75 14.094A5.973 5.973 0 004 17v1H1v-1a3 3 0 013.75-2.906z"/></svg>
+          <span>Students</span>
+        </a>
+        <div class="nav-section-label" style="margin-top: 16px;">SESSION</div>
+        <a href="#" class="nav-item" data-page="session" onclick="navigateTo('session', this)">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
+          <span>Session Log</span>
+        </a>
+        <a href="#" class="nav-item" data-page="reports" onclick="navigateTo('reports', this)">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 10a1 1 0 10-2 0v3a1 1 0 102 0v-3zm2-3a1 1 0 011 1v5a1 1 0 11-2 0v-5a1 1 0 011-1zm4-1a1 1 0 10-2 0v7a1 1 0 102 0V8z" clip-rule="evenodd"/></svg>
+          <span>Reports</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-session-card">
+        <div class="session-status-dot"></div>
+        <div class="session-info">
+          <span class="session-course">CS301 - Machine Learning</span>
+          <span class="session-time" id="sidebarSessionTime">00:00:00</span>
+        </div>
+        <button class="session-toggle-btn" id="sessionToggleBtn" onclick="toggleSession()">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/></svg>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Bar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle" onclick="toggleSidebar()">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="20" height="20"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/></svg>
+          </button>
+          <div class="page-breadcrumb">
+            <span class="breadcrumb-root">MAEA</span>
+            <span class="breadcrumb-sep">›</span>
+            <span class="breadcrumb-current" id="pageBreadcrumb">Overview</span>
+          </div>
+        </div>
+        <div class="topbar-center">
+          <div class="session-pill" id="sessionPill">
+            <span class="pulse-dot"></span>
+            <span id="sessionPillText">Session Paused</span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="topbar-time" id="topbarTime">--:--:--</div>
+          <div class="topbar-date" id="topbarDate">--</div>
+          <div class="topbar-avatar">
+            <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Container -->
+      <div class="page-container">
+
+        <!-- ==================== DASHBOARD PAGE ==================== -->
+        <div class="page active" id="page-dashboard">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Classroom Overview</h1>
+              <p class="page-subtitle">CS301 — Machine Learning · Section A · Room 204</p>
+            </div>
+            <div class="header-actions">
+              <button class="btn-secondary" onclick="exportReport()">
+                <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+                Export
+              </button>
+              <button class="btn-primary" onclick="navigateTo('attendance', document.querySelector('[data-page=attendance]'))">
+                <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg>
+                Live Feed
+              </button>
+            </div>
+          </div>
+
+          <!-- KPI Cards -->
+          <div class="kpi-grid">
+            <div class="kpi-card kpi-attendance">
+              <div class="kpi-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+              <div class="kpi-data">
+                <div class="kpi-value" id="kpiAttendance">24<span class="kpi-unit">/30</span></div>
+                <div class="kpi-label">Students Present</div>
+                <div class="kpi-trend up"><svg viewBox="0 0 16 16" fill="currentColor" width="12"><path d="M8 4l4 4H4l4-4z"/></svg> 80.0% attendance</div>
+              </div>
+            </div>
+            <div class="kpi-card kpi-engagement">
+              <div class="kpi-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+              <div class="kpi-data">
+                <div class="kpi-value" id="kpiEngagement">74<span class="kpi-unit">%</span></div>
+                <div class="kpi-label">Avg Engagement</div>
+                <div class="kpi-trend up"><svg viewBox="0 0 16 16" fill="currentColor" width="12"><path d="M8 4l4 4H4l4-4z"/></svg> +6% from last session</div>
+              </div>
+            </div>
+            <div class="kpi-card kpi-attention">
+              <div class="kpi-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+              <div class="kpi-data">
+                <div class="kpi-value" id="kpiAttention">62<span class="kpi-unit">%</span></div>
+                <div class="kpi-label">Avg Attention</div>
+                <div class="kpi-trend down"><svg viewBox="0 0 16 16" fill="currentColor" width="12"><path d="M8 12l4-4H4l4 4z"/></svg> -3% from last segment</div>
+              </div>
+            </div>
+            <div class="kpi-card kpi-audio">
+              <div class="kpi-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></div>
+              <div class="kpi-data">
+                <div class="kpi-value" id="kpiAudio">18<span class="kpi-unit">%</span></div>
+                <div class="kpi-label">Audio Participation</div>
+                <div class="kpi-trend neutral"><span>Moderate interaction</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Charts Row -->
+          <div class="charts-row">
+            <div class="chart-card chart-wide">
+              <div class="chart-header">
+                <div>
+                  <h3 class="chart-title">Real-Time Engagement Trend</h3>
+                  <p class="chart-subtitle">Multimodal signal fusion · Last 60 minutes</p>
+                </div>
+                <div class="chart-legend">
+                  <span class="legend-item"><span class="legend-dot" style="background:#7C3AED"></span>Engagement</span>
+                  <span class="legend-item"><span class="legend-dot" style="background:#06B6D4"></span>Attention</span>
+                  <span class="legend-item"><span class="legend-dot" style="background:#10B981"></span>Participation</span>
+                </div>
+              </div>
+              <div class="chart-wrap"><canvas id="engagementTrendChart"></canvas></div>
+            </div>
+            <div class="chart-card chart-narrow">
+              <div class="chart-header">
+                <h3 class="chart-title">Attendance Status</h3>
+              </div>
+              <div class="chart-wrap donut-wrap"><canvas id="attendanceDonutChart"></canvas></div>
+              <div class="donut-legend">
+                <div class="donut-legend-item"><span class="dli-dot" style="background:#10B981"></span><span>Present</span><strong id="dlPresent">24</strong></div>
+                <div class="donut-legend-item"><span class="dli-dot" style="background:#F59E0B"></span><span>Late</span><strong id="dlLate">3</strong></div>
+                <div class="donut-legend-item"><span class="dli-dot" style="background:#EF4444"></span><span>Absent</span><strong id="dlAbsent">3</strong></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Row: AI Suggestions + Activity Feed -->
+          <div class="bottom-row">
+            <div class="ai-suggestions-mini">
+              <div class="section-header">
+                <h3>AI Insights</h3>
+                <a href="#" class="see-all" onclick="navigateTo('suggestions', document.querySelector('[data-page=suggestions]'))">See All →</a>
+              </div>
+              <div id="dashboardSuggestions" class="suggestions-list"></div>
+            </div>
+            <div class="activity-feed-card">
+              <div class="section-header">
+                <h3>Live Activity Feed</h3>
+                <span class="feed-badge">LIVE</span>
+              </div>
+              <div id="activityFeed" class="activity-feed"></div>
+            </div>
+            <div class="signal-radar-card">
+              <div class="section-header"><h3>Behavioral Signals</h3></div>
+              <div class="signal-bars" id="signalBars"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== ATTENDANCE PAGE ==================== -->
+        <div class="page" id="page-attendance">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Attendance Tracking</h1>
+              <p class="page-subtitle">Automated presence detection · Timestamped logs</p>
+            </div>
+            <div class="header-actions">
+              <button class="btn-secondary" onclick="generateAttendanceReport()">Export CSV</button>
+              <button class="btn-primary" id="scanBtn" onclick="runAttendanceScan()">
+                <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M4 2a2 2 0 00-2 2v11a3 3 0 106 0V4a2 2 0 00-2-2H4zm1 14a1 1 0 100-2 1 1 0 000 2zm5-1.757l4.9-4.9a2 2 0 000-2.828L13.485 5.1a2 2 0 00-2.828 0L10 5.757v8.486zM16 18H9.071l6-6H16a2 2 0 012 2v2a2 2 0 01-2 2z" clip-rule="evenodd"/></svg>
+                Run Scan
+              </button>
+            </div>
+          </div>
+
+          <!-- Camera Feed Simulation -->
+          <div class="attendance-layout">
+            <div class="camera-panel">
+              <div class="camera-feed" id="cameraFeed">
+                <div class="camera-overlay">
+                  <div class="camera-corners">
+                    <div class="corner tl"></div>
+                    <div class="corner tr"></div>
+                    <div class="corner bl"></div>
+                    <div class="corner br"></div>
+                  </div>
+                  <div class="scan-line" id="scanLine"></div>
+                  <div class="camera-info-overlay">
+                    <div class="camera-label">CAMERA FEED · ROOM 204</div>
+                    <div class="camera-stats">
+                      <span id="detectedCount">0 Detected</span>
+                      <span class="cam-sep">|</span>
+                      <span id="confidenceLabel">Confidence: --</span>
+                    </div>
+                  </div>
+                  <div class="face-grid" id="faceGrid"></div>
+                </div>
+                <div class="no-feed-placeholder" id="noFeedPlaceholder">
+                  <svg viewBox="0 0 64 64" fill="none" width="64"><rect x="4" y="12" width="56" height="40" rx="4" stroke="#7C3AED" stroke-width="2"/><circle cx="32" cy="32" r="10" stroke="#06B6D4" stroke-width="2"/><circle cx="32" cy="32" r="4" fill="#7C3AED" opacity="0.4"/><circle cx="50" cy="18" r="4" fill="#10B981" opacity="0.6"/></svg>
+                  <p>Start a session to activate video feed</p>
+                  <button class="btn-primary" onclick="toggleSession()">Start Session</button>
+                </div>
+              </div>
+              <div class="camera-controls">
+                <div class="scan-status" id="scanStatus">
+                  <span class="status-dot paused"></span>
+                  <span id="scanStatusText">System Ready</span>
+                </div>
+                <div class="scan-controls">
+                  <div class="threshold-control">
+                    <label>Detection Threshold</label>
+                    <input type="range" min="50" max="99" value="75" id="thresholdSlider" oninput="updateThreshold(this.value)"/>
+                    <span id="thresholdLabel">75%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="attendance-roster">
+              <div class="roster-header">
+                <h3>Student Roster</h3>
+                <div class="roster-filter">
+                  <button class="filter-btn active" onclick="filterRoster('all', this)">All</button>
+                  <button class="filter-btn" onclick="filterRoster('present', this)">Present</button>
+                  <button class="filter-btn" onclick="filterRoster('late', this)">Late</button>
+                  <button class="filter-btn" onclick="filterRoster('absent', this)">Absent</button>
+                </div>
+              </div>
+              <div class="roster-list" id="rosterList"></div>
+            </div>
+          </div>
+
+          <!-- Attendance Timeline -->
+          <div class="chart-card" style="margin-top: 20px;">
+            <div class="chart-header">
+              <h3 class="chart-title">Attendance Timeline</h3>
+              <p class="chart-subtitle">Entry timestamps throughout session</p>
+            </div>
+            <div class="chart-wrap"><canvas id="attendanceTimelineChart"></canvas></div>
+          </div>
+        </div>
+
+        <!-- ==================== ENGAGEMENT PAGE ==================== -->
+        <div class="page" id="page-engagement">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Engagement & Session Dynamics</h1>
+              <p class="page-subtitle">Multimodal behavioral signal analysis</p>
+            </div>
+            <div class="header-actions">
+              <select class="select-control" id="engagementInterval" onchange="updateEngagementView()">
+                <option value="5">5-min intervals</option>
+                <option value="10" selected>10-min intervals</option>
+                <option value="15">15-min intervals</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Signal Cards -->
+          <div class="signal-grid">
+            <div class="signal-card">
+              <div class="signal-header">
+                <div class="signal-icon head-pose">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20"><circle cx="12" cy="8" r="5"/><path d="M12 13v3m0 0l-3 3m3-3l3 3"/></svg>
+                </div>
+                <div>
+                  <div class="signal-name">Head Pose</div>
+                  <div class="signal-status" id="headPoseStatus">Analyzing...</div>
+                </div>
+              </div>
+              <div class="signal-gauge-wrap">
+                <canvas id="headPoseGauge" width="160" height="80"></canvas>
+              </div>
+              <div class="signal-value" id="headPoseVal">--</div>
+              <div class="signal-desc">Forward-facing ratio</div>
+            </div>
+            <div class="signal-card">
+              <div class="signal-header">
+                <div class="signal-icon movement">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </div>
+                <div>
+                  <div class="signal-name">Movement</div>
+                  <div class="signal-status" id="movementStatus">Analyzing...</div>
+                </div>
+              </div>
+              <div class="signal-gauge-wrap">
+                <canvas id="movementGauge" width="160" height="80"></canvas>
+              </div>
+              <div class="signal-value" id="movementVal">--</div>
+              <div class="signal-desc">Activity level</div>
+            </div>
+            <div class="signal-card">
+              <div class="signal-header">
+                <div class="signal-icon inactivity">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+                </div>
+                <div>
+                  <div class="signal-name">Inactivity</div>
+                  <div class="signal-status" id="inactivityStatus">Analyzing...</div>
+                </div>
+              </div>
+              <div class="signal-gauge-wrap">
+                <canvas id="inactivityGauge" width="160" height="80"></canvas>
+              </div>
+              <div class="signal-value" id="inactivityVal">--</div>
+              <div class="signal-desc">Avg idle duration</div>
+            </div>
+            <div class="signal-card">
+              <div class="signal-header">
+                <div class="signal-icon audio">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+                </div>
+                <div>
+                  <div class="signal-name">Audio Activity</div>
+                  <div class="signal-status" id="audioStatus">Analyzing...</div>
+                </div>
+              </div>
+              <div class="signal-gauge-wrap">
+                <canvas id="audioGauge" width="160" height="80"></canvas>
+              </div>
+              <div class="signal-value" id="audioVal">--</div>
+              <div class="signal-desc">Interaction rate</div>
+            </div>
+          </div>
+
+          <!-- Engagement Charts -->
+          <div class="charts-row" style="margin-top: 20px;">
+            <div class="chart-card" style="flex: 2">
+              <div class="chart-header">
+                <h3 class="chart-title">Session Engagement Heatmap</h3>
+                <p class="chart-subtitle">Attention intensity per time segment · Per student</p>
+              </div>
+              <div id="heatmapContainer" class="heatmap-container"></div>
+            </div>
+            <div class="chart-card" style="flex: 1">
+              <div class="chart-header">
+                <h3 class="chart-title">Signal Distribution</h3>
+              </div>
+              <div class="chart-wrap"><canvas id="signalRadarChart"></canvas></div>
+            </div>
+          </div>
+
+          <div class="chart-card" style="margin-top: 20px;">
+            <div class="chart-header">
+              <h3 class="chart-title">Engagement Intervals Analysis</h3>
+              <p class="chart-subtitle">Attention drop detection & interaction peaks</p>
+            </div>
+            <div class="chart-wrap" style="height: 220px"><canvas id="engagementIntervalChart"></canvas></div>
+          </div>
+        </div>
+
+        <!-- ==================== AI SUGGESTIONS PAGE ==================== -->
+        <div class="page" id="page-suggestions">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">AI Teaching Suggestions</h1>
+              <p class="page-subtitle">Context-aware, AI-driven instructor assistance</p>
+            </div>
+            <div class="header-actions">
+              <button class="btn-secondary" onclick="refreshSuggestions()">
+                <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/></svg>
+                Refresh
+              </button>
+            </div>
+          </div>
+
+          <div class="suggestions-page-layout">
+            <div class="suggestions-main">
+              <div class="ai-status-banner" id="aiStatusBanner">
+                <div class="ai-brain-icon">
+                  <div class="brain-pulse"></div>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="32"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-1.66z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-1.66z"/></svg>
+                </div>
+                <div>
+                  <div class="ai-status-title">MAEA Intelligence Engine — Active</div>
+                  <div class="ai-status-sub">Continuously analyzing session dynamics and generating context-aware recommendations</div>
+                </div>
+                <div class="ai-confidence-badge">
+                  <span>Confidence</span>
+                  <strong id="aiConfidenceVal">87%</strong>
+                </div>
+              </div>
+
+              <div id="suggestionsContainer" class="suggestions-full-list"></div>
+            </div>
+
+            <div class="suggestions-sidebar">
+              <div class="chart-card">
+                <div class="chart-header"><h3 class="chart-title">Suggestion Categories</h3></div>
+                <div class="chart-wrap" style="height:200px"><canvas id="suggCategoryChart"></canvas></div>
+              </div>
+              <div class="chart-card" style="margin-top:16px">
+                <div class="chart-header"><h3 class="chart-title">Priority Breakdown</h3></div>
+                <div class="priority-bars" id="priorityBars"></div>
+              </div>
+              <div class="chart-card" style="margin-top:16px">
+                <div class="chart-header"><h3 class="chart-title">Historical Suggestions</h3></div>
+                <div class="history-list" id="suggHistoryList"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== STUDENTS PAGE ==================== -->
+        <div class="page" id="page-students">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Student Analytics</h1>
+              <p class="page-subtitle">Individual performance & engagement profiles</p>
+            </div>
+            <div class="header-actions">
+              <input type="text" class="search-input" id="studentSearch" placeholder="Search students..." oninput="filterStudents(this.value)"/>
+              <select class="select-control" id="sortStudents" onchange="sortStudentList()">
+                <option value="name">Sort: Name</option>
+                <option value="engagement">Sort: Engagement</option>
+                <option value="attendance">Sort: Attendance</option>
+              </select>
+            </div>
+          </div>
+          <div class="students-grid" id="studentsGrid"></div>
+        </div>
+
+        <!-- ==================== SESSION LOG PAGE ==================== -->
+        <div class="page" id="page-session">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Session Log</h1>
+              <p class="page-subtitle">Chronological session event timeline</p>
+            </div>
+            <div class="header-actions">
+              <button class="btn-secondary" onclick="clearLog()">Clear Log</button>
+            </div>
+          </div>
+          <div class="session-log-layout">
+            <div class="session-log-main">
+              <div class="log-timeline" id="logTimeline"></div>
+            </div>
+            <div class="session-log-sidebar">
+              <div class="chart-card">
+                <div class="chart-header"><h3 class="chart-title">Session Stats</h3></div>
+                <div class="session-stats-list" id="sessionStatsList"></div>
+              </div>
+              <div class="chart-card" style="margin-top:16px">
+                <div class="chart-header"><h3 class="chart-title">Event Distribution</h3></div>
+                <div class="chart-wrap" style="height:200px"><canvas id="eventDistChart"></canvas></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== REPORTS PAGE ==================== -->
+        <div class="page" id="page-reports">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Reports & Analytics</h1>
+              <p class="page-subtitle">Session summaries and trend analysis</p>
+            </div>
+            <div class="header-actions">
+              <button class="btn-primary" onclick="generateFullReport()">Generate Report</button>
+            </div>
+          </div>
+
+          <div class="reports-grid">
+            <div class="chart-card col-span-2">
+              <div class="chart-header">
+                <h3 class="chart-title">Weekly Attendance Trend</h3>
+              </div>
+              <div class="chart-wrap" style="height:220px"><canvas id="weeklyAttendanceChart"></canvas></div>
+            </div>
+            <div class="chart-card">
+              <div class="chart-header"><h3 class="chart-title">Engagement Over Sessions</h3></div>
+              <div class="chart-wrap" style="height:220px"><canvas id="sessionEngagementChart"></canvas></div>
+            </div>
+            <div class="chart-card">
+              <div class="chart-header"><h3 class="chart-title">Top Performers</h3></div>
+              <div class="performers-list" id="topPerformersList"></div>
+            </div>
+            <div class="chart-card">
+              <div class="chart-header"><h3 class="chart-title">At-Risk Students</h3></div>
+              <div class="at-risk-list" id="atRiskList"></div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end page-container -->
+    </main>
+  </div><!-- end app-shell -->
+
+  <!-- Toast Notifications -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Student Detail Modal -->
+  <div class="modal-overlay" id="studentModal" onclick="closeModal(event)">
+    <div class="modal-card">
+      <button class="modal-close" onclick="closeStudentModal()">×</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="charts.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
